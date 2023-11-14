@@ -6,7 +6,7 @@ import {useState, useEffect} from 'react';
 
 
 export default function App() {
-  const db = SQLite.openDatabase('example.db');
+  const [db, setDb] = useState(SQLite.openDatabase('example.db'));
   const [isLoading, setIsLoading] = useState(true);
   const[names, setNames] = useState([]);
   const [currentName, setCurrentName] = useState(undefined);
@@ -28,7 +28,7 @@ export default function App() {
     });
 
     setIsLoading(false);
-  }, []);
+  }, [db]);
 
 
   if(isLoading){
@@ -39,34 +39,36 @@ export default function App() {
     );
   }
 
+  // Tambah Nama
   const addName = () => {
     db.transaction(tx => {
-      tx.executeSql('INSERT INTO names (name) value (?)', [currentName], 
-      (txObj, resultSet) => {
-        let existingNames = [...names];
-        existingNames.push({id: resultSet.insertId, names: currentName});
-        setNames(existingNames);
-        setCurrentName(undefined);
-      },
-      (txObj, error) => console.log(error)
+      tx.executeSql('INSERT INTO names (name) values (?)', [currentName],
+        (txObj, resultSet) => {
+          let existingNames = [...names];
+          existingNames.push({ id: resultSet.insertId, name: currentName});
+          setNames(existingNames);
+          setCurrentName(undefined);
+        },
+        (txObj, error) => console.log(error)
       );
     });
   }
 
+  // Show Nama
   const showNames = () => {
     return names.map((name, index) => {
       return (
-        <View key={index}>
+        <View key={index} style={styles.row}>
           <Text>{name.name}</Text>
         </View>
-      )
+      );
     });
-  }
+  };
 
   return (
     <View style={styles.container}>
-      <TextInput value={currentName} placeholder='name' onChangeText={setCurrentName}/>
-      <Button title='Add Name' onPress={addName}/>
+      <TextInput value={currentName} placeholder='Masukkan Nama' onChangeText={setCurrentName}/>
+      <Button title='Tambah nama' onPress={addName}/>
       {showNames()}
       <StatusBar style="auto" />
     </View>
