@@ -40,6 +40,7 @@ const About = ({route, navigation: { goBack }}) => {
     });
 
 
+    // Mengisi variabel setNames dengan mengambil data dari database
     db.transaction(tx => {
       tx.executeSql('SELECT * FROM names', null,
         (txObj, resultSet) => setNames(resultSet.rows._array),

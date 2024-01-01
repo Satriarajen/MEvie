@@ -13,7 +13,15 @@ const Home = ({navigation}) => {
 
   // Attribut
   const [names, setNames] = useState([]);
+  const [currentName, setCurrentName] = useState(undefined);
+  const [tahun, setTahun] = useState([]);
+  const [currentTahun, setCurrentTahun] = useState(undefined);
+  const [desc, setDesc] = useState([]);
+  const [currentDesc, setCurrentDesc] = useState(undefined);
 
+  // Belum dan Sudah ditonton
+  const [wishlist, setWishlist] = useState([]);
+  const [watched, setWatched] = useState([]);
 
   useEffect(() => {
     db.transaction(tx => {
@@ -61,8 +69,8 @@ const Home = ({navigation}) => {
         <View key={index} style={styles.row}>
 
           <View style={styles.kolom1}>
-          <Text>Judul:  {name.name}</Text>
           <Image key={name.id} source={{ uri: name.imagePath }} style={{ width: 200, height: 200 }} />
+          <Text>Judul:  {name.name}</Text>
           <Text>Tahun:  {name.tahun}</Text>
           <Text>Deskripsi:  {name.desc}</Text>
           </View>

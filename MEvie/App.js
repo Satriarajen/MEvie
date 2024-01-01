@@ -4,8 +4,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from './Home';
 import About from './About';
-import InputGambar from './InputGambar';
 import Gambar from './Gambar';
+import EditFilm from './EditFilm';
 
 
 const Stack = createStackNavigator();
@@ -17,6 +17,7 @@ const App = () => {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Tambah Film" component={About} />
         <Stack.Screen name="gambar" component={Gambar} />
+        <Stack.Screen name="EditFilm" component={EditFilm} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -2,7 +2,7 @@ import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import * as SQLite from 'expo-sqlite';
 import { useState, useEffect } from 'react';
-import {Text, View, StyleSheet, Button, TextInput, TouchableOpacity, Image} from 'react-native';
+import {Text, View, StyleSheet, Button, TextInput, TouchableOpacity, Image, Alert} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 
@@ -25,17 +25,22 @@ const About = ({route, navigation: { goBack }}) => {
     useEffect(() => {
     //Membuat Tabel baru 
     db.transaction(tx => {
-      tx.executeSql('CREATE TABLE IF NOT EXISTS names (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, tahun NUMBER, desc TEXT, imagePath TEXT)', (tx,results) =>{
-        if (results.rowsAffected > 0) {
-          console.log('Kolom berhasil ditambahkan');
-        } else {
-          console.log('Gagal menambahkan kolom');
-        }
-      })
-      console.log("Tabel")
+      try{
+        tx.executeSql('CREATE TABLE IF NOT EXISTS names (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, tahun NUMBER, desc TEXT, imagePath TEXT)', (tx,results) =>{
+          if (results.rowsAffected > 0) {
+            console.log('Kolom berhasil ditambahkan');
+          } else {
+            console.log('Gagal menambahkan kolom');
+          }
+        })
+        console.log("Berhasil Membuat Tabel")
+      } catch (error) {
+        console.log("Gagal Membuat Tabel")
+      }
     });
 
 
+    // Mengisi variabel setNames dengan mengambil data dari database
     db.transaction(tx => {
       tx.executeSql('SELECT * FROM names', null,
         (txObj, resultSet) => setNames(resultSet.rows._array),
@@ -45,6 +50,8 @@ const About = ({route, navigation: { goBack }}) => {
 
     setIsLoading(false);
   }, [db]);
+
+  
 
   if (isLoading) {
     return (
@@ -70,13 +77,13 @@ const About = ({route, navigation: { goBack }}) => {
       quality: 1,
     });
 
-    if (!result.cancelled) {
-      setImagePath(result.uri);
+    if (!result.canceled) {
+      setImagePath(result.assets[0].uri);
     }
   };
   // Input gambar END
 
-// Tambah Nama
+// Tambah Film
   const addName = async () => {
     try{
 
@@ -85,10 +92,10 @@ const About = ({route, navigation: { goBack }}) => {
 
 
       db.transaction(tx => {
-        tx.executeSql('INSERT INTO names (name, tahun, desc) values (?, ?, ?)',[currentName,currentTahun,currentDesc],
+        tx.executeSql('INSERT INTO names (name, tahun, desc, imagePath) values (?, ?, ?, ?)',[currentName,currentTahun,currentDesc, newPath],
           (txObj, resultSet) => {
             let existingNames = [...names];
-            existingNames.push({id:resultSet.insertId, name:currentName, tahun:currentTahun, desc: currentDesc});
+            existingNames.push({id:resultSet.insertId, name:currentName, tahun:currentTahun, desc: currentDesc, imagePath: newPath});
             setNames(existingNames);
             setCurrentName(undefined);
             setCurrentTahun(undefined);
@@ -97,11 +104,14 @@ const About = ({route, navigation: { goBack }}) => {
   
           },
           (txObj, error) => console.log(error),
-          console.log("berhasil ditambahkan")
+          Alert.alert('Sukses', 'Data berhasil dikirim!')
         );
       });
     } catch(error)
-    {console.error('Error Menambahkan Data');}
+    {
+      console.error('Error Menambahkan Data', error);
+      Alert.alert('Error', 'Terjadi kesalahan saat mengirim data.');
+    }
   }
   
   // Tampilan Pada Layar
@@ -113,9 +123,9 @@ const About = ({route, navigation: { goBack }}) => {
       <TextInput style={styles.input2} value={currentName} placeholder='Judul' onChangeText={setCurrentName} />
       <TextInput style={styles.input2} value={currentTahun} placeholder='Tahun' onChangeText={setCurrentTahun} />
       <TextInput style={styles.input2} value={currentDesc} placeholder='Desc' onChangeText={setCurrentDesc} />
-      <TouchableOpacity onPress={chooseImage}>
-        <Text>Pilih Gambar</Text>
-      </TouchableOpacity>
+      
+      
+      <Button title="Pilih Gambar" onPress={chooseImage}/>
       {imagePath && <Image source={{ uri: imagePath }} style={{ width: 200, height: 200 }} />}
 
 
