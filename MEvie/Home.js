@@ -15,22 +15,6 @@ const Home = ({navigation}) => {
   const [names, setNames] = useState([]);
 
 
-  useEffect(() => {
-    db.transaction(tx => {
-      tx.executeSql('SELECT * FROM names', null,
-        (txObj, resultSet) => {
-          const allNames = resultSet.rows._array;
-          const wishlistNames = allNames.filter(name => name.status === 'wishlist');
-          const watchedNames = allNames.filter(name => name.status === 'watched');
-
-          setWishlist(wishlistNames);
-          setWatched(watchedNames);
-        },
-        (txObj, error) => console.log(error)
-      );
-    });
-  }, [db]);
-
     // GET Nama
       db.transaction(tx => {
       tx.executeSql('SELECT * FROM names', null,
@@ -61,8 +45,8 @@ const Home = ({navigation}) => {
         <View key={index} style={styles.row}>
 
           <View style={styles.kolom1}>
-          <Text>Judul:  {name.name}</Text>
           <Image key={name.id} source={{ uri: name.imagePath }} style={{ width: 200, height: 200 }} />
+          <Text>Judul:  {name.name}</Text>
           <Text>Tahun:  {name.tahun}</Text>
           <Text>Deskripsi:  {name.desc}</Text>
           </View>

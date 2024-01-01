@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, Image } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
 import * as SQLite from 'expo-sqlite';
-import * as ImagePicker from 'expo-image-picker';
-import * as FileSystem from 'expo-file-system';
+// import * as ImagePicker from 'expo-image-picker';
+// import * as FileSystem from 'expo-file-system';
 
 const EditFilm = ({ route, navigation }) => {
   const { id } = route.params;
@@ -12,7 +12,7 @@ const EditFilm = ({ route, navigation }) => {
   const [currentTahun, setCurrentTahun] = useState('');
   const [currentDesc, setCurrentDesc] = useState('');
   const [currentImage, setCurrentImage] = useState('');
-  const [imagePath, setImagePath] = useState('');
+
 
   useEffect(() => {
     // Ambil data film berdasarkan ID dari database
@@ -25,7 +25,6 @@ const EditFilm = ({ route, navigation }) => {
             setCurrentTahun(film.tahun);
             setCurrentDesc(film.desc);
             setCurrentImage(film.imagePath);
-            setImagePath(film.imagePath);
           }
         },
         (_, error) => console.log(error)
@@ -33,47 +32,23 @@ const EditFilm = ({ route, navigation }) => {
     });
   }, [db, id]);
 
-// Fungsi untuk memilih gambar
-const chooseImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      console.log('Izin akses galeri ditolak!');
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
+  const updateName = () => {
+    // Update data film ke database
+    db.transaction(tx => {
+      tx.executeSql(
+        'UPDATE names SET name = ?, tahun = ?, desc = ?, imagePath = ? WHERE id = ?',
+        [currentName, currentTahun, currentDesc, currentImage, id],
+        (_, result) => {
+          if (result.rowsAffected > 0) {
+            console.log('Film berhasil diupdate');
+            navigation.goBack(); // Kembali ke halaman sebelumnya setelah update
+          } else {
+            console.log('Gagal update film');
+          }
+        },
+        (_, error) => console.log(error)
+      );
     });
-
-    if (!result.canceled) {
-      setImagePath(result.assets[0].uri);
-    }
-  };
-
-    
-  // Fungsi untuk mengupdate film
-  const updateFilm = async () => {
-    try {
-      const newPath = `${FileSystem.documentDirectory}images/${Date.now()}.jpg`;
-      await FileSystem.copyAsync({ from: imagePath, to: newPath });
-
-      db.transaction((tx) => {
-        tx.executeSql(
-          'UPDATE names SET name = ?, tahun = ?, desc = ?, imagePath = ? WHERE id = ?',
-          [currentName, currentTahun, currentDesc, newPath, id],
-          (_, result) => {
-            // Navigasi kembali ke layar Home setelah update
-            navigation.navigate('Home');
-          },
-          (_, error) => console.log(error)
-        );
-      });
-    } catch (error) {
-      console.error('Error updating film', error);
-    }
   };
 
   return (
@@ -97,9 +72,7 @@ const chooseImage = async () => {
         onChangeText={text => setCurrentDesc(text)}
         placeholder='Deskripsi'
       />
-      <Button title="Pilih Gambar" onPress={chooseImage} />
-      {imagePath && <Image source={{ uri: imagePath }} style={{ width: 200, height: 200 }} />}
-      <Button title='Update' onPress={updateFilm} />
+      <Button title='Update' onPress={updateName} />
     </View>
   );
 };
