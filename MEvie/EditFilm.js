@@ -89,7 +89,7 @@ const chooseImage = async () => {
         style={styles.input}
         value={currentTahun}
         onChangeText={text => setCurrentTahun(text)}
-        placeholder='Tahun'
+        placeholder='Link'
       />
       <TextInput
         style={styles.input}

@@ -26,7 +26,7 @@ const About = ({route, navigation: { goBack }}) => {
     //Membuat Tabel baru 
     db.transaction(tx => {
       try{
-        tx.executeSql('CREATE TABLE IF NOT EXISTS names (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, tahun NUMBER, desc TEXT, imagePath TEXT)', (tx,results) =>{
+        tx.executeSql('CREATE TABLE IF NOT EXISTS names (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, tahun Text, desc TEXT, imagePath TEXT)', (tx,results) =>{
           if (results.rowsAffected > 0) {
             console.log('Kolom berhasil ditambahkan');
           } else {
@@ -121,8 +121,8 @@ const About = ({route, navigation: { goBack }}) => {
     <Text>Tambah Film</Text>
 
       <TextInput style={styles.input2} value={currentName} placeholder='Judul' onChangeText={setCurrentName} />
-      <TextInput style={styles.input2} value={currentTahun} placeholder='Tahun' onChangeText={setCurrentTahun} />
       <TextInput style={styles.input2} value={currentDesc} placeholder='Desc' onChangeText={setCurrentDesc} />
+      <TextInput style={styles.input2} value={currentTahun} placeholder='Link' onChangeText={setCurrentTahun} />
       
       
       <Button title="Pilih Gambar" onPress={chooseImage}/>
