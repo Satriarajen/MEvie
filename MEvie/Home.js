@@ -45,9 +45,9 @@ const Home = ({navigation}) => {
         <View key={index} style={styles.row}>
 
           <View style={styles.kolom1}>
-          <Image key={name.id} source={{ uri: name.imagePath }} style={{ width: 200, height: 200 }} />
           <Text>Judul:  {name.name}</Text>
-          <Text>Tahun:  {name.tahun}</Text>
+          <Image key={name.id} source={{ uri: name.imagePath }} style={{ width: 200, height: 200 }} />
+          <Text>Link:  {name.tahun}</Text>
           <Text>Deskripsi:  {name.desc}</Text>
           </View>
           
@@ -65,7 +65,6 @@ const Home = ({navigation}) => {
     // Menampilkan Pada Layar
     <ScrollView>
     <Button title="Tambah Film" onPress={()=>navigation.navigate('Tambah Film')} />
-    <Button title="gambar" onPress={()=>navigation.navigate('gambar')} />
     
     {showNames()}
     </ScrollView>
