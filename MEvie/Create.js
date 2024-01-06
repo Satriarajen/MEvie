@@ -6,61 +6,19 @@ import {Text, View, StyleSheet, Button, TextInput, TouchableOpacity, Image, Aler
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 
-const About = ({route, navigation: { goBack }}) => {
+const Create = ({route, navigation}) => {
 
+  const { user_id } = route.params;
   const [db, setDb] = useState(SQLite.openDatabase('example.db'));
   const [isLoading, setIsLoading] = useState(true);
 
   const [names, setNames] = useState([]);
   const [currentName, setCurrentName] = useState(undefined);
-  const [tahun, setTahun] = useState([]);
   const [currentTahun, setCurrentTahun] = useState(undefined);
-  const [desc, setDesc] = useState([]);
   const [currentDesc, setCurrentDesc] = useState(undefined);
-  const [image, setImage] = useState([]);
   const [currentImage, setCurrentImage] = useState(undefined);
 
   const [imagePath, setImagePath] = useState(null);
-
-    useEffect(() => {
-    //Membuat Tabel baru 
-    db.transaction(tx => {
-      try{
-        tx.executeSql('CREATE TABLE IF NOT EXISTS names (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, tahun Text, desc TEXT, imagePath TEXT)', (tx,results) =>{
-          if (results.rowsAffected > 0) {
-            console.log('Kolom berhasil ditambahkan');
-          } else {
-            console.log('Gagal menambahkan kolom');
-          }
-        })
-        console.log("Berhasil Membuat Tabel")
-      } catch (error) {
-        console.log("Gagal Membuat Tabel")
-      }
-    });
-
-
-    // Mengisi variabel setNames dengan mengambil data dari database
-    db.transaction(tx => {
-      tx.executeSql('SELECT * FROM names', null,
-        (txObj, resultSet) => setNames(resultSet.rows._array),
-        (txObj, error) => console.log(error)
-      );
-    });
-
-    setIsLoading(false);
-  }, [db]);
-
-  
-
-  if (isLoading) {
-    return (
-      <View style={styles.container}>
-        <Text>Loading names...</Text>
-      </View>
-    );
-  }
-
 
   // Input gambar START
   const chooseImage = async () => {
@@ -81,15 +39,13 @@ const About = ({route, navigation: { goBack }}) => {
       setImagePath(result.assets[0].uri);
     }
   };
-  // Input gambar END
 
 // Tambah Film
-  const addName = async () => {
+  const addName = async ({}) => {
     try{
 
       const newPath = `${FileSystem.documentDirectory}images/${Date.now()}.jpg`;
       await FileSystem.copyAsync({ from: imagePath, to: newPath });
-
 
       db.transaction(tx => {
         tx.executeSql('INSERT INTO names (name, tahun, desc, imagePath) values (?, ?, ?, ?)',[currentName,currentTahun,currentDesc, newPath],
@@ -107,6 +63,7 @@ const About = ({route, navigation: { goBack }}) => {
           Alert.alert('Sukses', 'Data berhasil dikirim!')
         );
       });
+      navigation.navigate('Home');
     } catch(error)
     {
       console.error('Error Menambahkan Data', error);
@@ -114,7 +71,6 @@ const About = ({route, navigation: { goBack }}) => {
     }
   }
   
-  // Tampilan Pada Layar
   return (
     <View style={styles.container2}>
 
@@ -131,7 +87,6 @@ const About = ({route, navigation: { goBack }}) => {
 
       <Button title="Tambah" onPress={addName} />
       
-
       <StatusBar style="auto" />
     </View>
   );
@@ -184,4 +139,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default About;
+export default Create;
