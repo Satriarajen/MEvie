@@ -41,35 +41,51 @@ const Create = ({route, navigation}) => {
   };
 
 // Tambah Film
-  const addName = async ({}) => {
-    try{
+const addName = async () => {
+  try {
+    const newPath = `${FileSystem.documentDirectory}images/${Date.now()}.jpg`;
+    await FileSystem.copyAsync({ from: imagePath, to: newPath });
 
-      const newPath = `${FileSystem.documentDirectory}images/${Date.now()}.jpg`;
-      await FileSystem.copyAsync({ from: imagePath, to: newPath });
+    // Simpan status default "unwatched" dan user_id (yang diterima dari properti navigasi)
+    const status = 'unwatched';
 
-      db.transaction(tx => {
-        tx.executeSql('INSERT INTO names (name, tahun, desc, imagePath) values (?, ?, ?, ?)',[currentName,currentTahun,currentDesc, newPath],
-          (txObj, resultSet) => {
-            let existingNames = [...names];
-            existingNames.push({id:resultSet.insertId, name:currentName, tahun:currentTahun, desc: currentDesc, imagePath: newPath});
-            setNames(existingNames);
-            setCurrentName(undefined);
-            setCurrentTahun(undefined);
-            setCurrentDesc(undefined);
-            setCurrentImage(undefined);
-  
-          },
-          (txObj, error) => console.log(error),
-          Alert.alert('Sukses', 'Data berhasil dikirim!')
-        );
-      });
-      navigation.navigate('Home');
-    } catch(error)
-    {
-      console.error('Error Menambahkan Data', error);
-      Alert.alert('Error', 'Terjadi kesalahan saat mengirim data.');
-    }
+    db.transaction((tx) => {
+      tx.executeSql(
+        'INSERT INTO names (name, tahun, desc, imagePath, status, user_id) VALUES (?, ?, ?, ?, ?, ?)',
+        [currentName, currentTahun, currentDesc, newPath, status, user_id],
+        (txObj, resultSet) => {
+          let existingNames = [...names];
+          existingNames.push({
+            id: resultSet.insertId,
+            name: currentName,
+            tahun: currentTahun,
+            desc: currentDesc,
+            imagePath: newPath,
+            status: status,
+            user_id: user_id,
+          });
+          setNames(existingNames);
+          setCurrentName(undefined);
+          setCurrentTahun(undefined);
+          setCurrentDesc(undefined);
+          setCurrentImage(undefined);
+        },
+        (txObj, error) => {
+          console.log(error);
+          Alert.alert('Error', 'Terjadi kesalahan saat menambahkan data.');
+        }
+      );
+    });
+
+    Alert.alert('Sukses', 'data berhasil ditambahkan');
+    navigation.navigate('Home', { user_id: user_id });
+  } catch (error) {
+    console.error('Error Menambahkan Data', error);
+    Alert.alert('Error', 'Terjadi kesalahan saat mengirim data.');
   }
+};
+
+
   
   return (
     <View style={styles.container2}>

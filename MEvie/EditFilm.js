@@ -6,6 +6,7 @@ import * as FileSystem from 'expo-file-system';
 
 const EditFilm = ({ route, navigation }) => {
   const { id } = route.params;
+  const { user_id } = route.params;
   const [db, setDb] = useState(SQLite.openDatabase('example.db'));
 
   const [currentName, setCurrentName] = useState('');
@@ -62,11 +63,11 @@ const chooseImage = async () => {
 
       db.transaction((tx) => {
         tx.executeSql(
-          'UPDATE names SET name = ?, tahun = ?, desc = ?, imagePath = ? WHERE id = ?',
+          'UPDATE names SET name = ?, tahun = ?, desc = ?, imagePath = ?, WHERE id = ?',
           [currentName, currentTahun, currentDesc, newPath, id],
           (_, result) => {
             // Navigasi kembali ke layar Home setelah update
-            navigation.navigate('Home');
+            navigation.navigate('Home', { user_id: user_id });
           },
           (_, error) => console.log(error)
         );

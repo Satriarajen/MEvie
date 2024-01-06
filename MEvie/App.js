@@ -6,6 +6,7 @@ import Create from './Create';
 import Register from './Register';
 import EditFilm from './EditFilm';
 import Login from './Login';
+import Watched from './Watched';
 
 
 const Stack = createStackNavigator();
@@ -19,6 +20,7 @@ const App = () => {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Tambah Film" component={Create} />
         <Stack.Screen name="EditFilm" component={EditFilm} />
+        <Stack.Screen name="Sudah Ditonton" component={Watched} />
       </Stack.Navigator>
     </NavigationContainer>
   );

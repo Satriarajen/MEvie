@@ -9,6 +9,7 @@ const Login = ({ navigation }) => {
   const [currentUserId, setCurrentUserId] = useState(null);
   
   useEffect(() => {
+    
     db.transaction((tx) => {
       tx.executeSql(
         "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, name TEXT, email TEXT, password TEXT)",

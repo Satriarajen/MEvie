@@ -4,37 +4,10 @@ import * as SQLite from "expo-sqlite";
 import { useState, useEffect } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 
-const Home = ({ route, navigation }) => {
+const Watched = ({route, navigation }) => {
   const [db, setDb] = useState(SQLite.openDatabase("example.db"));
   const { user_id } = route.params;
-  useEffect(() => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, name TEXT, email TEXT, password TEXT)",
-        (txObj, resultSet) => {
-          if (resultSet.rowsAffected > 0) {
-            console.log('Tabel "users" berhasil dibuat');
-          } else {
-            console.log('Gagal membuat tabel "users"');
-          }
-        },
-        (txObj, error) => console.log(error)
-      );
-    });
 
-    db.transaction((tx) => {
-      tx.executeSql(
-        'CREATE TABLE IF NOT EXISTS names (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, tahun TEXT, desc TEXT, imagePath TEXT, status TEXT DEFAULT "unwatched", user_id INTEGER, FOREIGN KEY (user_id) REFERENCES users(id))',
-        (tx, results) => {
-          if (results.rowsAffected > 0) {
-            console.log('Tabel "names" berhasil dibuat');
-          } else {
-            console.log('Gagal membuat tabel "names"');
-          }
-        }
-      );
-    });
-  }, [db]);
   const [names, setNames] = useState([]);
 
   // GET Nama
@@ -63,13 +36,12 @@ const Home = ({ route, navigation }) => {
       );
     });
   };
+  
 
   // Menampilkan Nama
   const showNames = () => {
-    const filteredNames = names.filter(
-      (name) => name.user_id === user_id && name.status === "unwatched"
-    );
-
+    const filteredNames = names.filter((name) => name.user_id === user_id && name.status === 'watched');
+  
     return filteredNames.map((name, index) => {
       return (
         <View key={index} style={styles.row}>
@@ -84,18 +56,13 @@ const Home = ({ route, navigation }) => {
             <Text>Deskripsi: {name.desc}</Text>
             <Text>status: {name.status}</Text>
           </View>
-
+  
           <View style={styles.kolom}>
             <Button title="Delete" onPress={() => deleteName(name.id)} />
-            <Button title="Sudah Ditonton" onPress={() => Watched(name.id)} />
+            <Button title="Belum ditonton" onPress={() => Unwatched(name.id)} />
             <Button
               title="Update"
-              onPress={() =>
-                navigation.navigate("EditFilm", {
-                  id: name.id,
-                  user_id: user_id,
-                })
-              }
+              onPress={() => navigation.navigate("EditFilm", { id: name.id, user_id: user_id })}
             />
           </View>
         </View>
@@ -103,39 +70,28 @@ const Home = ({ route, navigation }) => {
     });
   };
 
-  const Watched = (id) => {
+  const Unwatched = (id) => {
     db.transaction((tx) => {
       tx.executeSql(
-        'UPDATE names SET status = "watched" WHERE id = ?',
+        'UPDATE names SET status = "unwatched" WHERE id = ?',
         [id],
         (txObj, resultSet) => {
           if (resultSet.rowsAffected > 0) {
             let existingNames = [...names].filter((name) => name.id !== id);
             setNames(existingNames);
           } else {
-            console.log("Gagal mengubah status");
+            console.log('Gagal mengubah status');
           }
         },
         (txObj, error) => console.log(error)
       );
     });
+    
   };
 
   return (
     <View style={styles.container}>
-      <Button
-        title="Sudah Ditonton"
-        onPress={() => navigation.navigate("Sudah Ditonton", { user_id: user_id })}
-      />
       <ScrollView>{showNames()}</ScrollView>
-      <View style={styles.navbar}>
-        <Button
-          title="Tambah Film"
-          onPress={() =>
-            navigation.navigate("Tambah Film", { user_id: user_id })
-          }
-        />
-      </View>
     </View>
   );
 };
@@ -177,4 +133,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default Watched;
