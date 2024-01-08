@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
+import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from "react-native";
 import * as SQLite from "expo-sqlite";
 
 const Login = ({ navigation }) => {
@@ -68,6 +68,10 @@ const Login = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.mevie}>
+        <Text style={styles.me}>ME</Text>
+        <Text style={styles.vie}>vie</Text>
+      </Text>
       <Text style={styles.title}>Login</Text>
       <TextInput
         style={styles.input}
@@ -82,7 +86,11 @@ const Login = ({ navigation }) => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Login" onPress={loginUser} />
+      <TouchableOpacity
+        onPress={loginUser}
+        style={styles.button}>
+        <Text style={[styles.buttonText, { fontWeight: 'bold' }]}>Login</Text>
+      </TouchableOpacity>
       <Text style={styles.signupText}>
         Belum punya akun?{" "}
         <Text
@@ -102,26 +110,61 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 16,
+    backgroundColor: "#130B2B",
+  },
+  me: {
+    fontSize: 40,
+    color: "#FE53BB",
+  },
+  vie: {
+    fontSize: 34,
+    color: "white",
+  },
+  mevie: {
+    top: 165,
+    left: 145,
+    width: 135,
+    height: 60,
+    textAlign: "left",
+    fontWeight: "700",
+    position: "absolute",
   },
   title: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "bold",
     marginBottom: 16,
+    color: "#FE53BB"
   },
   input: {
-    height: 40,
+    height: 50,
     borderColor: "gray",
     borderWidth: 1,
-    marginBottom: 10,
+    marginBottom: 15,
     paddingLeft: 8,
     paddingRight: 8,
     width: "100%",
+    backgroundColor: "white",
+    borderRadius: 10,
+    
   },
   signupText: {
     marginTop: 16,
+    color: "white",
   },
   signupLink: {
-    color: "blue",
+    color: "#FE53BB",
+  },
+  button: {
+    backgroundColor: '#FE53BB',
+    padding: 15,
+    borderRadius: 10,
+    width: '100%',
+    alignSelf: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    textAlign: 'center',
+    fontWeight: "Bold",
   },
 });
 

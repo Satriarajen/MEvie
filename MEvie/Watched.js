@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet, Button, Image } from "react-native";
+import { Text, View, StyleSheet, Button, Image, TouchableOpacity } from "react-native";
 import * as SQLite from "expo-sqlite";
 import { useState, useEffect } from "react";
 import { ScrollView } from "react-native-gesture-handler";
@@ -46,25 +46,40 @@ const Watched = ({route, navigation }) => {
       return (
         <View key={index} style={styles.row}>
           <View style={styles.kolom1}>
-            <Text>Judul: {name.name}</Text>
+            <Text style={{ color: '#FE53BB',  fontWeight: 'bold', fontSize: 25, marginBottom: 15,  textAlign: 'center' }}> {name.name}</Text>
             <Image
               key={name.id}
               source={{ uri: name.imagePath }}
-              style={{ width: 200, height: 200 }}
-            />
-            <Text>Link: {name.tahun}</Text>
-            <Text>Deskripsi: {name.desc}</Text>
-            <Text>status: {name.status}</Text>
+              style={{
+                width: 300,
+                height: 300,
+                borderRadius: 40, 
+                overflow: 'hidden',
+                marginBottom: 15
+              }}/>
+            <Text style={{ color: 'white', marginBottom: 10, textAlign: 'center'  }}> {name.desc}</Text>
+            <Text style={{ color: 'white', marginBottom: 10, textAlign: 'center' }}> {name.status}</Text>
+            <Text style={{ color: 'white', marginBottom: 10, textAlign: 'center' }}> {name.tahun}</Text>
           </View>
-  
+
           <View style={styles.kolom}>
-            <Button title="Delete" onPress={() => deleteName(name.id)} />
-            <Button title="Belum ditonton" onPress={() => Unwatched(name.id)} />
-            <Button
-              title="Update"
+            <TouchableOpacity
+              onPress={() => deleteName(name.id)}
+              style={styles.button}>
+               <Text style={[styles.buttonText, { fontWeight: 'bold' }]}>Delete</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => Unwatched(name.id)}
+              style={styles.button}>
+               <Text style={[styles.buttonText, { fontWeight: 'bold' }]}>Belum ditonton</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
               onPress={() => navigation.navigate("EditFilm", { id: name.id, user_id: user_id })}
-            />
+              style={styles.button}>
+               <Text style={[styles.buttonText, { fontWeight: 'bold' }]}>Update</Text>
+            </TouchableOpacity>
           </View>
+          
         </View>
       );
     });
@@ -99,9 +114,9 @@ const Watched = ({route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#130B2B",
   },
   row: {
-    flexDirection: "row",
     alignItems: "center",
     alignSelf: "stretch",
     justifyContent: "space-between",
@@ -113,13 +128,14 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     justifyContent: "space-between",
     margin: 8,
-    width: "70%",
+    width: "100%",
+    
   },
   kolom: {
-    flexDirection: "column",
+    flexDirection: "row",
     alignItems: "center",
     alignSelf: "stretch",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
     margin: 8,
     width: "30%",
   },
@@ -127,9 +143,25 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     width: "100%",
-    // backgroundColor: "lightgray",
+    backgroundColor: "lightgray",
     padding: 10,
     alignItems: "center",
+  },
+  button: {
+    backgroundColor: '#FE53BB',
+    padding: 10,
+    borderRadius: 15,
+    width: '100%',
+    alignSelf: 'center',
+    marginVertical: 5,
+    marginHorizontal: 5,
+    paddingLeft: 5,
+    paddingRight: 5,
+  },
+  buttonText: {
+    fontSize: 12,
+    color: '#fff',
+    textAlign: 'center',
   },
 });
 
