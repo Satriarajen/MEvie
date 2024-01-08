@@ -53,19 +53,19 @@ const Watched = ({route, navigation }) => {
               style={{
                 width: 300,
                 height: 300,
-                borderRadius: 40, 
+                borderRadius: 15, 
                 overflow: 'hidden',
                 marginBottom: 15
               }}/>
             <Text style={{ color: 'white', marginBottom: 10, textAlign: 'center'  }}> {name.desc}</Text>
-            <Text style={{ color: 'white', marginBottom: 10, textAlign: 'center' }}> {name.status}</Text>
+            {/* <Text style={{ color: 'white', marginBottom: 10, textAlign: 'center' }}> {name.status}</Text> */}
             <Text style={{ color: 'white', marginBottom: 10, textAlign: 'center' }}> {name.tahun}</Text>
           </View>
 
           <View style={styles.kolom}>
             <TouchableOpacity
               onPress={() => deleteName(name.id)}
-              style={styles.button}>
+              style={styles.buttonCancel}>
                <Text style={[styles.buttonText, { fontWeight: 'bold' }]}>Delete</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -158,6 +158,18 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     paddingRight: 5,
   },
+  buttonCancel: {
+    borderColor : '#FE53BB',
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 15,
+    width: '100%',
+    alignSelf: 'center',
+    marginVertical: 5,
+    marginHorizontal: 5,
+    paddingLeft: 5,
+    paddingRight: 5,
+  },  
   buttonText: {
     fontSize: 12,
     color: '#fff',

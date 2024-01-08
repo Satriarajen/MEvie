@@ -1,5 +1,12 @@
 import React from "react";
-import { Text, View, StyleSheet, Button, Image, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Button,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import * as SQLite from "expo-sqlite";
 import { useState, useEffect } from "react";
 import { ScrollView } from "react-native-gesture-handler";
@@ -78,11 +85,13 @@ const Home = ({ route, navigation }) => {
             <Image
               key={name.id}
               source={{ uri: name.imagePath }}
-              style={{ width: 200, height: 250,
-                borderRadius: 100, 
-                overflow: 'hidden',
-                marginBottom: 15
- }}
+              style={{
+                width: 200,
+                height: 250,
+                borderRadius: 10,
+                overflow: "hidden",
+                marginBottom: 15,
+              }}
             />
             <Text style={styles.desc}>{name.desc}</Text>
             <Text style={styles.link}>{name.tahun}</Text>
@@ -91,21 +100,34 @@ const Home = ({ route, navigation }) => {
           <View style={styles.kolom}>
             <TouchableOpacity
               onPress={() => deleteName(name.id)}
-              style={styles.button}>
-               <Text style={[styles.buttonText, { fontWeight: 'bold' }]}>Delete</Text>
+              style={styles.buttonCancel}
+            >
+              <Text style={[styles.buttonText, { fontWeight: "bold" }]}>
+                Delete
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => Watched(name.id)}
-              style={styles.button}>
-               <Text style={[styles.buttonText, { fontWeight: 'bold' }]}>Sudah ditonton</Text>
+              style={styles.button}
+            >
+              <Text style={[styles.buttonText, { fontWeight: "bold" }]}>
+                Sudah ditonton
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => navigation.navigate("EditFilm", { id: name.id, user_id: user_id })}
-              style={styles.button}>
-               <Text style={[styles.buttonText, { fontWeight: 'bold' }]}>Update</Text>
+              onPress={() =>
+                navigation.navigate("EditFilm", {
+                  id: name.id,
+                  user_id: user_id,
+                })
+              }
+              style={styles.button}
+            >
+              <Text style={[styles.buttonText, { fontWeight: "bold" }]}>
+                Update
+              </Text>
             </TouchableOpacity>
           </View>
-
         </View>
       );
     });
@@ -130,28 +152,46 @@ const Home = ({ route, navigation }) => {
   };
 
   return (
-
     <View style={styles.container}>
-      <View style={styles.mevie}><Text style={styles.me}>Me</Text> 
-      <Text style={styles.vie}>Vie</Text></View>
+      <View style={styles.alternativeLayoutButtonContainer}>
+        <View style={styles.mevie}>
+          <Text style={styles.me}>Me</Text>
+          <Text style={styles.vie}>Vie</Text>
+        </View>
+        <Button
+          title="Logout"
+          color="#130B2B"
+          style={styles.buttonCancel}
+          onPress={() => navigation.navigate("Login")}
+        />
+      </View>
+
       {/* <Image
         style={styles.accountCircleIcon}
         resizeMode="cover"
         source={require("./assets/account_circle.png")}
       /> */}
       <View style={styles.alternativeLayoutButtonContainer}>
-         <View style={styles.wishlist}>
-         <Button  title="Wishlist"
-        color="#FE53BB"
-        onPress={() => navigation.navigate("unwatched", { user_id: user_id })} />
-          </View> 
-          <Button  title="Has Been Watched"
-        color="#130B2B"
-        onPress={() => navigation.navigate("Sudah Ditonton", { user_id: user_id })} />
+        <View style={styles.wishlist}>
+          <Button
+            title="Wishlist"
+            color="#FE53BB"
+            onPress={() =>
+              navigation.navigate("unwatched", { user_id: user_id })
+            }
+          />
         </View>
+        <Button
+          title="Has Been Watched"
+          color="#130B2B"
+          onPress={() =>
+            navigation.navigate("Sudah Ditonton", { user_id: user_id })
+          }
+        />
+      </View>
       <ScrollView>{showNames()}</ScrollView>
       <View style={styles.navbar}>
-      <Button
+        <Button
           title="Add Movie"
           color="#FE53BB"
           onPress={() =>
@@ -168,29 +208,28 @@ const Home = ({ route, navigation }) => {
   );
 };
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#130B2B',
+    backgroundColor: "#130B2B",
   },
   mevie: {
     margin: 20,
-    flexDirection: 'row',
+    flexDirection: "row",
     //justifyContent: 'space-between',
   },
   me: {
-    color: '#FE53BB',
+    color: "#FE53BB",
     fontSize: 32,
     //fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontWeight: "700",
     //wordWrap: 'break-word',
   },
   vie: {
-    color: 'white',
+    color: "white",
     fontSize: 32,
     //fontFamily: 'Poppins',
-    fontWeight: '700',
+    fontWeight: "700",
     //wordWrap: 'break-word',
   },
   accountCircleIcon: {
@@ -198,19 +237,19 @@ const styles = StyleSheet.create({
     left: 350,
     width: 30,
     height: 30,
-    position: "absolute",
+    marginLeft: 200,
   },
   //addIcon: {
-    //top: 689,
-    //left: 272,
-    //width: 40,
-    //height: 40,
-    //position: "absolute",
+  //top: 689,
+  //left: 272,
+  //width: 40,
+  //height: 40,
+  //position: "absolute",
   //},
   alternativeLayoutButtonContainer: {
     margin: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   row: {
     flexDirection: "column",
@@ -220,20 +259,20 @@ const styles = StyleSheet.create({
     margin: 8,
   },
   tittle: {
-    color: '#FE53BB',  
-    fontWeight: 'bold', 
-    fontSize: 25, 
+    color: "#FE53BB",
+    fontWeight: "bold",
+    fontSize: 25,
     marginBottom: 15,
   },
   desc: {
-    color: 'white', 
+    color: "white",
     marginBottom: 10,
-     textAlign: 'center',
+    textAlign: "center",
   },
   link: {
-    color: 'white', 
+    color: "white",
     marginBottom: 10,
-    textAlign: 'center',
+    textAlign: "center",
   },
   kolom1: {
     flexDirection: "column",
@@ -242,7 +281,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     margin: 8,
     width: "100%",
-
   },
   kolom: {
     flexDirection: "row",
@@ -251,7 +289,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     margin: 8,
     width: "30%",
-
   },
   navbar: {
     position: "absolute",
@@ -262,11 +299,23 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   button: {
-    backgroundColor: '#FE53BB',
+    backgroundColor: "#FE53BB",
     padding: 10,
     borderRadius: 15,
-    width: '100%',
-    alignSelf: 'center',
+    width: "100%",
+    alignSelf: "center",
+    marginVertical: 5,
+    marginHorizontal: 5,
+    paddingLeft: 5,
+    paddingRight: 5,
+  },
+  buttonCancel: {
+    borderColor: "#FE53BB",
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 15,
+    width: "100%",
+    alignSelf: "center",
     marginVertical: 5,
     marginHorizontal: 5,
     paddingLeft: 5,
@@ -274,9 +323,9 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 12,
-    color: '#fff',
-    textAlign: 'center',
-  },
+    color: "#fff",
+    textAlign: "center",
+  },
 });
 
 export default Home;
