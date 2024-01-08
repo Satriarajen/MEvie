@@ -79,28 +79,39 @@ const chooseImage = async () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.mevie}><Text style={styles.me}>Me</Text> 
+      <Text style={styles.vie}>Vie</Text></View>
+      <Image
+        style={styles.accountCircleIcon}
+        resizeMode="cover"
+        source={require("./assets/account_circle.png")}
+      />
       <Text>Edit Film</Text>
       <TextInput
         style={styles.input}
         value={currentName}
         onChangeText={text => setCurrentName(text)}
-        placeholder='Judul'
+        placeholder='Tittle'
       />
       <TextInput
         style={styles.input}
         value={currentTahun}
         onChangeText={text => setCurrentTahun(text)}
-        placeholder='Link'
+        placeholder='Descriptions'
       />
       <TextInput
         style={styles.input}
         value={currentDesc}
         onChangeText={text => setCurrentDesc(text)}
-        placeholder='Deskripsi'
+        placeholder='Link'
       />
-      <Button title="Pilih Gambar" onPress={chooseImage} />
-      {imagePath && <Image source={{ uri: imagePath }} style={{ width: 200, height: 200 }} />}
-      <Button title='Update' onPress={updateFilm} />
+      <Button title="add your poster film" color= '#FE53BB' onPress={chooseImage} />
+      {imagePath && <Image source={{ uri: imagePath }} style={{ width: 200, height: 250 }} />}
+      
+      <View style={styles.update}>
+      <Button title='Update' color= '#FE53BB'
+       onPress={updateFilm} />
+        </View>
     </View>
   );
 };
@@ -111,16 +122,47 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
+    backgroundColor: '#130B2B',
+  },
+  mevie: {
+    margin: 20,
+    flexDirection: 'row',
+    //justifyContent: 'space-between',
+  },
+  me: {
+    color: '#FE53BB',
+    fontSize: 32,
+    //fontFamily: 'Poppins',
+    fontWeight: '700',
+    //wordWrap: 'break-word',
+  },
+  vie: {
+    color: 'white',
+    fontSize: 32,
+    //fontFamily: 'Poppins',
+    fontWeight: '700',
+    //wordWrap: 'break-word',
+  },
+  accountCircleIcon: {
+    top: 35,
+    left: 350,
+    width: 30,
+    height: 30,
+    position: "absolute",
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 1,
     marginBottom: 10,
     paddingLeft: 8,
-    paddingRight: 8,
-    width: '100%',
+    pingRight: 8,
+    width: "100%",
+    backgroundColor: "white",
   },
+  update: {
+    top: 30,
+  }
 });
 
 export default EditFilm;

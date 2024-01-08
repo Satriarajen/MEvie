@@ -85,25 +85,34 @@ const addName = async () => {
   }
 };
 
-
-  
   return (
     <View style={styles.container2}>
+       <View style={styles.mevie}><Text style={styles.me}>Me</Text> 
+      <Text style={styles.vie}>Vie</Text></View>
+      {/* <Image
+        style={styles.accountCircleIcon}
+        resizeMode="cover"
+        source={require("./assets/account_circle.png")}
+      /> */}
 
-    <Text>Tambah Film</Text>
-
-      <TextInput style={styles.input2} value={currentName} placeholder='Judul' onChangeText={setCurrentName} />
-      <TextInput style={styles.input2} value={currentDesc} placeholder='Desc' onChangeText={setCurrentDesc} />
-      <TextInput style={styles.input2} value={currentTahun} placeholder='Link' onChangeText={setCurrentTahun} />
       
-      
-      <Button title="Pilih Gambar" onPress={chooseImage}/>
-      {imagePath && <Image source={{ uri: imagePath }} style={{ width: 200, height: 200 }} />}
+      <Text></Text>
 
+<TextInput style={styles.input2} value={currentName} placeholder='Tittle' colorText= 'white' onChangeText={setCurrentName}  />
+<TextInput style={styles.input2} value={currentDesc} placeholder='Descriptions' onChangeText={setCurrentDesc} />
+<TextInput style={styles.input2} value={currentTahun} placeholder='Link' onChangeText={setCurrentTahun} />
 
-      <Button title="Tambah" onPress={addName} />
+<View style={styles.imge}>
+  <Button title="add your poster film" color= '#FE53BB' onPress={chooseImage}/>
+{imagePath && <Image source={{ uri: imagePath }} style={{ width: 200, height: 250 }} />}
+        </View>
       
-      <StatusBar style="auto" />
+<View style={styles.add}>
+<Button title="save" color= '#FE53BB' onPress={addName} />
+  </View>
+
+<StatusBar style="auto" />
+    
     </View>
   );
 };
@@ -111,10 +120,37 @@ const addName = async () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#130B2B',
+    //alignItems: 'center',
+    //justifyContent: 'center',
+    //color: 'white',
   },
+  mevie: {
+    margin: 20,
+    flexDirection: 'row',
+    //justifyContent: 'space-between',
+  },
+  me: {
+    color: '#FE53BB',
+    fontSize: 32,
+    //fontFamily: 'Poppins',
+    fontWeight: '700',
+    //wordWrap: 'break-word',
+  },
+  vie: {
+    color: 'white',
+    fontSize: 32,
+    //fontFamily: 'Poppins',
+    fontWeight: '700',
+    //wordWrap: 'break-word',
+  },
+  // accountCircleIcon: {
+  //   top: 35,
+  //   left: 350,
+  //   width: 30,
+  //   height: 30,
+  //   position: "absolute",
+  // },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -143,16 +179,47 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
+   backgroundColor: '#130B2B',
+    //color: 'white',
   },
   input2: {
     height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
+    borderColor: "gray",
+    borderWidth: 2,
     marginBottom: 10,
     paddingLeft: 8,
     paddingRight: 8,
-    width: '100%',
+    width: "100%",
+    backgroundColor: "white",
+
+    //alignItems: '',
   },
+  placeholder: {
+    backgroundColor: 'white',
+  },
+  imge: {
+    backgroundColor: 'black',
+    padding: 10,
+    borderRadius: 15,
+    width: '60%',
+    alignSelf: 'center',
+    marginVertical: 5,
+    marginHorizontal: 5,
+    paddingLeft: 5,
+    paddingRight: 5,
+    // top: 15,
+    // //bottom: 20,
+    // //left: 100,
+    // alignItems: 'center',
+  },
+  add: {
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+    //backgroundColor: "lightgray",
+    padding: 40,
+    alignItems: "flex-end",
+  }
 });
 
 export default Create;
